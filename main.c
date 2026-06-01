@@ -1,21 +1,94 @@
-#include <stdio.h>
-
-typedef struct celula {
-    #string conteudo;
-    #no* esq, dir;
-} no;
-"""
-
-= Nome dos integrantes do grupo ======================
-
-- João VItor Costa Braga - RGA: 2024.1906.XXX-X
+/*Integrantes do Grupo
+- João VItor Costa Braga - RGA: 2024.1906.061-7
 - Louise Mayumi Takigawa Pereia - RGA: 2024.1906.028-5
+*/
 
-=====================================================
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
-"""
+typedef struct arvoreB {
+  int ordem;
+  struct no *raiz;
+} arvoreB;
 
+typedef struct no {
+
+    int numChaves;
+    int folha;
+
+    char **chaves;
+
+    struct no **filhos;
+
+} no;
+
+no *criaNo(int ordem, int folha) {
+
+    no *novoNo = malloc(sizeof(no));
+
+    novoNo->numChaves = 0;
+    novoNo->folha = folha;
+
+    novoNo->chaves = malloc((2 * ordem) * sizeof(char*));
+    for (int i = 0; i < 2 * ordem; i++) {
+        novoNo->chaves[i] = malloc(100 * sizeof(char)); // alocando espaço para as chaves
+    }
+
+    novoNo->filhos = malloc((2 * ordem + 1) * sizeof(no*));
+    for (int i = 0; i < 2 * ordem + 1; i++) {
+        novoNo->filhos[i] = NULL;
+    }
+
+    return novoNo;
 }
+
+arvoreB *criaArvore(int ordem) {
+
+    arvoreB *arvore = malloc(sizeof(arvoreB));
+
+    arvore->ordem = ordem;
+
+    arvore->raiz = criaNo(ordem, 1);
+
+    return arvore;
+}
+no* inserir(no *raiz, char *chave, int ordem) {
+    // Função de inserção na árvore B
+    // Implementação a ser feita
+    if (raiz->numChaves >= 2 * ordem) {
+        printf("Pagina cheia! (teste)\n");
+        return;
+    }
+
+    strcpy(raiz->chaves[raiz->numChaves], chave);
+
+    raiz->numChaves++;
+}
+
+/*Função para carregar os nomes dos pokémons a partir de um arquivo*/
+void loadFile(no *raiz, int ordem) {
+
+    FILE *file = fopen("pokemon_names.txt", "r");
+
+    if (!file) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+
+    char pokemon[100];
+
+    while (fgets(pokemon, sizeof(pokemon), file)) {
+
+        pokemon[strcspn(pokemon, "\n")] = 0;
+
+        inserir(raiz, pokemon, ordem);
+    }
+
+    fclose(file);
+}
+
+/*
 
 int buscar(no* raiz){
     """
@@ -64,18 +137,29 @@ no* inserir(no* raiz){
     """
 
 };
-
-void imprimir_arvore(no* raiz){
-
-};
+*/
 
 int main() {
     
-    int opcao, ordem_arvore = 0;
+    int opcao = 0, ordem_arvore;
 
-    printf("Qual será a ordem da árvore?" );
-    scanf("%s", &ordem_arvore);
+    printf("Qual será a ordem da árvore?\n" );
+    scanf("%d", &ordem_arvore);
+    while (ordem_arvore < 2){
+        printf("A ordem da árvore deve ser maior ou igual a 2. Insira novamente:\n");
+        scanf("%d", &ordem_arvore);
+    }
 
+    arvoreB *arvore = criaArvore(ordem_arvore);
+
+    loadFile(arvore->raiz, ordem_arvore);
+
+    printf("\nPokemons carregados:\n");
+
+    for (int i = 0; i < arvore->raiz->numChaves; i++) {
+        printf("%s\n", arvore->raiz->chaves[i]);
+    }
+/*
     """
     Cria a árvore aqui fora, tem que pegar o arquivo "pokemon_names.txt" e povoar a arvore
 
@@ -94,19 +178,19 @@ int main() {
     https://docente.ifrn.edu.br/robinsonalves/disciplinas/estruturas-de-dados-nao-lineares/ArvBrl.pdf
         
     """
-    
+*/    
     while (opcao != 9){
 
         printf("// ----- // ----- // ÁRVORE B // ----- // ----- //\n");
         printf("[1] - Buscar\n");
         printf("[2] - Inserir\n");
-        printf("[3] - Visualizar\n");
         printf("[9] - Finalizar\n");
 
-        scanf("%d", opcao);
+        scanf("%d", &opcao);
         
         if (opcao == 1){
-
+            printf("Digite o nome do pokémon que deseja buscar: \n");
+            
 
         }
 
@@ -115,8 +199,8 @@ int main() {
 
         }
 
-        else if (opcao == 3){
-
+        else if (opcao == 9){
+            break;
 
         }
 
