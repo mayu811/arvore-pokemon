@@ -59,27 +59,6 @@ arvoreB *criaArvore(int ordem) {
 }
 
 
-//========= funcao de busca =============
-/*
-
-procedimento buscar(no* raiz, char chave){
-    """
-    lê uma chave x e realiza sua busca na árvore B, 
-    informando se ela foi encontrada e,
-    quando aplicável, a posição onde se encontra.
-    
-    Entrada:
-
-    Saída:
-
-    Compara a chave x com a(s) chave(s) do no
-    raiz. Se a chave nao estiver no raiz, a busca
-    deve prosseguir em um certo filho dessa
-    página.
-    – Escolhe-se qual filho explorar de forma
-    parecida com a pesquisa realizada na
-    árvore binária de pesquisa
-    """
 /* ============================================================
  *  BUSCA
  *  
@@ -142,6 +121,11 @@ resultadoBusca buscarB(no *p, const char *chave)
 }
 
 
+
+/* ============================================================
+ *  INSERIR
+ *  
+ * ============================================================ */
 // funcao inserir em pagina nao cheia
 no* inserir(no *raiz, char *chave, int ordem) {
     // Função de inserção na árvore B
@@ -170,6 +154,13 @@ no* inserir(no* raiz){
 };
 */
 
+
+
+
+/* ============================================================
+ *  CISÃO DE PAGINA (DIVISAO OU SPLIT)
+ *  
+ * ============================================================ */
 // funcao de cisao/split de paginas
 void cisaoPagina(no *pai, int indice, no *filhoCheio, int ordem) {
     //Cria uma nova página
@@ -217,6 +208,12 @@ void cisaoPagina(no *pai, int indice, no *filhoCheio, int ordem) {
     pai->filhos[indice + 1] = novaPagina;
 }
 
+
+
+/* ============================================================
+ *  INSERCAO A PARTIR DO ARQUIVO .txt
+ *  
+ * ============================================================ */
 /*Função para carregar os nomes dos pokémons a partir de um arquivo*/
 void loadFile(no *raiz, int ordem) {
 
@@ -237,6 +234,12 @@ void loadFile(no *raiz, int ordem) {
     fclose(file);
 }
 
+
+
+/* ============================================================
+ *  MAIN
+ *  
+ * ============================================================ */
 int main() {
     
     int opcao = 0, ordem_arvore;
