@@ -43,51 +43,7 @@ no *criaNo(int ordem, int folha) {
     return novoNo;
 }
 
-arvoreB *criaArvore(int ordem) {
-
-    arvoreB *arvore = malloc(sizeof(arvoreB));
-
-    arvore->ordem = ordem;
-
-    arvore->raiz = criaNo(ordem, 1);
-
-    return arvore;
-}
-no* inserir(no *raiz, char *chave, int ordem) {
-    // Função de inserção na árvore B
-    // Implementação a ser feita
-    if (raiz->numChaves >= 2 * ordem) {
-        printf("Pagina cheia! (teste)\n");
-        return;
-    }
-
-    strcpy(raiz->chaves[raiz->numChaves], chave);
-
-    raiz->numChaves++;
-}
-
-/*Função para carregar os nomes dos pokémons a partir de um arquivo*/
-void loadFile(no *raiz, int ordem) {
-
-    FILE *file = fopen("pokemon_names.txt", "r");
-
-    if (!file) {
-        printf("Erro ao abrir arquivo.\n");
-        return;
-    }
-
-    char pokemon[100];
-
-    while (fgets(pokemon, sizeof(pokemon), file)) {
-
-        pokemon[strcspn(pokemon, "\n")] = 0;
-
-        inserir(raiz, pokemon, ordem);
-    }
-
-    fclose(file);
-}
-
+//funcao de busca
 /*
 
 int buscar(no* raiz){
@@ -127,6 +83,34 @@ int buscar(no* raiz){
 
 };
 
+
+arvoreB *criaArvore(int ordem) {
+
+    arvoreB *arvore = malloc(sizeof(arvoreB));
+
+    arvore->ordem = ordem;
+
+    arvore->raiz = criaNo(ordem, 1);
+
+    return arvore;
+}
+
+// funcao inserir em pagina nao cheia
+no* inserir(no *raiz, char *chave, int ordem) {
+    // Função de inserção na árvore B
+    // Implementação a ser feita
+    if (raiz->numChaves >= 2 * ordem) {
+        printf("Pagina cheia! (teste)\n");
+        return;
+    }
+
+    strcpy(raiz->chaves[raiz->numChaves], chave);
+
+    raiz->numChaves++;
+}
+
+// função inserir para pagina cheia
+/*
 no* inserir(no* raiz){
     """
     lê uma chave x e realiza sua inserção na árvore B.
@@ -138,6 +122,28 @@ no* inserir(no* raiz){
 
 };
 */
+
+/*Função para carregar os nomes dos pokémons a partir de um arquivo*/
+void loadFile(no *raiz, int ordem) {
+
+    FILE *file = fopen("pokemon_names.txt", "r");
+
+    if (!file) {
+        printf("Erro ao abrir arquivo.\n");
+        return;
+    }
+
+    char pokemon[100];
+
+    while (fgets(pokemon, sizeof(pokemon), file)) {
+
+        pokemon[strcspn(pokemon, "\n")] = 0;
+
+        inserir(raiz, pokemon, ordem);
+    }
+
+    fclose(file);
+}
 
 int main() {
     
