@@ -16,12 +16,16 @@ typedef struct no {
 
     int numChaves;
     int folha;
-
     char **chaves;
-
     struct no **filhos;
 
 } no;
+
+typedef struct resultadoBusca{
+    no* pt;
+    int g;
+    int f;
+} resultadoBusca;
 
 no *criaNo(int ordem, int folha) {
 
@@ -43,10 +47,22 @@ no *criaNo(int ordem, int folha) {
     return novoNo;
 }
 
-//funcao de busca
+
+arvoreB *criaArvore(int ordem) {
+
+    arvoreB *arvore = malloc(sizeof(arvoreB));
+
+    arvore->ordem = ordem;
+    arvore->raiz = criaNo(ordem, 1);
+
+    return arvore;
+}
+
+
+//========= funcao de busca =============
 /*
 
-int buscar(no* raiz){
+procedimento buscar(no* raiz, char chave){
     """
     lê uma chave x e realiza sua busca na árvore B, 
     informando se ela foi encontrada e,
@@ -63,37 +79,68 @@ int buscar(no* raiz){
     – Escolhe-se qual filho explorar de forma
     parecida com a pesquisa realizada na
     árvore binária de pesquisa
-
-    implementacao do livro:
-
-    procedimento buscaB(x, pt, f, g)
-        p := ptraiz; pt := λ; f := 0
-        enquanto p ≠ λ faça
-        i := g := 1; pt := p
-        enquanto i≤ m faça
-            se x > p ↑. s[i] então i := g := i + 1
-            senão se x = p ↑. s[i] então
-                p := λ % chave encontrada
-                f := 1
-            senão p := p ↑. pont[i – 1] % mudança de página
-            i := m + 2
-        se i = m + 1 então p := p ↑. pont[m]
-        
     """
+/* ============================================================
+ *  BUSCA
+ *  
+ * ============================================================ */
 
-};
+resultadoBusca buscarB(no *p, const char *chave)
+{
+    resultadoBusca resultado;
+    int i;
+    int g;
 
+    /* arvore vazia */
+    if (p == NULL) {
+        resultado.pt = NULL;
+        resultado.f  = 0;
+        resultado.g  = 0;
+        return resultado;
+    }
 
-arvoreB *criaArvore(int ordem) {
+    /* percorre as paginas descendo pela arvore */
+    while (p != NULL) {
 
-    arvoreB *arvore = malloc(sizeof(arvoreB));
+        /* varre as chaves do no atual, atualizando g (indice do filho a explorar) */
+        i = 0;
+        g = 0;
+        while (i < p->numChaves) {
+            if (strcmp(chave, p->chaves[i]) > 0) {
+                /* chave procurada e maior: avanca para a direita */
+                i++;
+                g++;
+            } else if (strcmp(chave, p->chaves[i]) == 0) {
+                /* chave encontrada neste no */
+                resultado.pt = p;
+                resultado.f  = 1;
+                resultado.g  = i;
+                return resultado;
+            } else {
+                /* chave procurada e menor: para de varrer, desce pelo filho g */
+                break;
+            }
+        }
 
-    arvore->ordem = ordem;
+        /* chegou a uma folha sem encontrar: nao existe na arvore */
+        if (p->folha) {
+            resultado.pt = p;
+            resultado.f  = 0;
+            resultado.g  = g;
+            return resultado;
+        }
 
-    arvore->raiz = criaNo(ordem, 1);
+        /* desce para o filho indicado por g */
+        p = p->filhos[g];
+    }
 
-    return arvore;
+    /* seguranca: nunca deve chegar aqui */
+    resultado.pt = NULL;
+    resultado.f  = 0;
+    resultado.g  = 0;
+    return resultado;
 }
+
 
 // funcao inserir em pagina nao cheia
 no* inserir(no *raiz, char *chave, int ordem) {
@@ -122,6 +169,14 @@ no* inserir(no* raiz){
 
 };
 */
+
+// funcao de cisao de paginas
+void cisaoPagina(
+    no *pai,
+    int indice,
+    no *filhoCheio,
+    int ordem
+);
 
 /*Função para carregar os nomes dos pokémons a partir de um arquivo*/
 void loadFile(no *raiz, int ordem) {
