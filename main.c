@@ -141,18 +141,31 @@ no* inserir(no *raiz, char *chave, int ordem) {
 }
 
 // função inserir para pagina cheia
-/*
-no* inserir(no* raiz){
-    """
+
+arvoreB* inserir(arvoreB* arvore, char nomePokemon, int ordemArvore){
+    /*
     lê uma chave x e realiza sua inserção na árvore B.
 
     Entrada:
 
     Saída:
-    """
+    */
 
+    //passo 1
+    resultadoBusca buscaChave = buscarB(arvore->raiz, nomePokemon);
+
+    // Achou a chave na arvore? Então não precisa inserir
+    if (buscaChave.f == 1)
+        printf("Esta chave já existe! Ela está na posição %d", buscaChave.g);
+        return arvore;
+    // Nao? Insire na estrutura então:
+    else {
+        // implementa aqui a inserção
+    }
+
+    
 };
-*/
+
 
 
 
@@ -242,20 +255,20 @@ void loadFile(no *raiz, int ordem) {
  * ============================================================ */
 int main() {
     
-    int opcao = 0, ordem_arvore;
+    int opcao = 0, ordemArvore;
 
     // Pega a ordem da arvore
     printf("Qual será a ordem da árvore?\n" );
-    scanf("%d", &ordem_arvore);
+    scanf("%d", &ordemArvore);
 
-    while (ordem_arvore < 2){
+    while (ordemArvore < 2){
         printf("A ordem da árvore deve ser maior ou igual a 2. Insira novamente:\n");
-        scanf("%d", &ordem_arvore);
+        scanf("%d", &ordemArvore);
     }
 
     // Criação da árvore
-    arvoreB *arvore = criaArvore(ordem_arvore);
-    loadFile(arvore->raiz, ordem_arvore);
+    arvoreB *arvore = criaArvore(ordemArvore);
+    loadFile(arvore->raiz, ordemArvore);
     printf("\nPokemons carregados:\n");
 
     // Imprime os pokemons inseridos:
@@ -270,6 +283,8 @@ int main() {
         printf("[2] - Inserir\n");
         printf("[9] - Finalizar\n");
 
+        printf("-------------------------------\n");
+        printf("Entre com a sua opção: ");
         scanf("%d", &opcao);
         
         // [1] - Buscar
@@ -278,15 +293,15 @@ int main() {
             printf("Digite o nome do pokémon que deseja buscar: \n");
             
             char nomeProcurar[100];
-            scanf("%d", nomeProcurar);
+            scanf(" %99[^\n]", &nomeProcurar);
             //buscarB();
         }
 
         // [2] - Inserir
         else if (opcao == 2){
             char nomePokemon[100];
-            scanf("%d, &nomePokemon");
-            inserir(arvore, nomePokemon, ordem_arvore);
+            scanf(" %99[^\n]", &nomePokemon);
+            inserir(arvore, nomePokemon, ordemArvore);
         }
 
         // [9] - Encerra execução  
@@ -296,7 +311,7 @@ int main() {
         }
 
         else {
-            printf("\nResposta inválida!\nInsira novamente: ");
+            printf("\nResposta invalida!\nInsira novamente: ");
         }
     }
     return 0;
