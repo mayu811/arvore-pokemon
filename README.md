@@ -1,6 +1,10 @@
 # arvore-pokemon
 Resolução do trabalho da disciplina de Estrutura de dados
 
+Desenvolvedores:
+- João Vitor Costa Braga
+- Louise Mayumi Takigawa Pereira
+
 
 # Como Executar a Aplicação
 
